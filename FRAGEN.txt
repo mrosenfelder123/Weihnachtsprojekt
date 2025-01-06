@@ -8,3 +8,7 @@
 
 3. Muss ich die Reibkräfte zusätzlich berücksichitgen, wenn ich bereits das Reibmoment berücksichtige?
    Wenn ja, dann f_r = J_trans^T * F_r? mit J_trans = [J1_trans, J2_trans]^T?
+
+4. System linearisieren?
+
+5. V18-18/21 Bild, + zwischen inverse kinematic und dynamic falsch

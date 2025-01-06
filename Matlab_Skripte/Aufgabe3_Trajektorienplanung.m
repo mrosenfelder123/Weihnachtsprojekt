@@ -23,7 +23,7 @@ syms t
 trajektorie = [p_x(1) + p_x(2)*t + p_x(3)*t.^2 + p_x(4)*t.^3;
                p_y(1) + p_y(2)*t + p_y(3)*t.^2 + p_y(4)*t.^3;
                0];
-matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\M', 'Vars', {t});
+matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\Trajektorie', 'Vars', {t});
 
 
 
