@@ -1,0 +1,10 @@
+1. Wie berechne ich meinen Orientierungsvektor aus meiner Rotationsmatrix. Oder kann ich einfach die Rotationsmatritzen verwenden
+   beim berechnen der kinetischen Energie?
+
+2. Wenn ich wie in V9-3/12 die kinetische Energie ausrechne mit der Jacobimatrix bzgl. des Körperfesten KOS, bekomme ich zeros,
+   da sie konst. ist bezüglich diesem KOS. Deswegen berechne ich bzgl. Intertial, wo ist der Fehler? 
+   Und warum nochmal Trafo ins Ineritalsystem des Trägheitsmoment? Die kinetische Energie ist doch ein scalar und somit unabhänging vom
+   Bezugssystem.
+
+3. Muss ich die Reibkräfte zusätzlich berücksichitgen, wenn ich bereits das Reibmoment berücksichtige?
+   Wenn ja, dann f_r = J_trans^T * F_r? mit J_trans = [J1_trans, J2_trans]^T?
