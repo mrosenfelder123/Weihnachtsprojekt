@@ -11,4 +11,10 @@
 
 4. System linearisieren?
 
-5. V18-18/21 Bild, + zwischen inverse kinematic und dynamic falsch
+5. V18-18/21 Bild, + zwischen inverse kinematic und dynamic falsch?
+
+6. Wie umgehen mit Mehrdeutigkeiten in der inversen Kinematik?
+
+7. Für inverse Dynamik: B ist eye(2,2)?
+
+8. Ansich macht das simulieren garkein Sinn da invere Dynamics = Modell?!

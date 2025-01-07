@@ -8,7 +8,7 @@ clc;
 clear;
 close all;
 
-%% TEILAUFGABE a): 
+%TEILAUFGABE a): 
 %Wahl geeigneter Verallgemeinerter Koordinaten
 
 %Verallgemeinerte Koordinaten:
@@ -27,14 +27,14 @@ syms l1 l2 m1 m2 I1 I2
 %Durchmesser der Gelenke zur bestimmung des wirkenden Reibmoments
 syms d1 d2
 
-sys_param = [l1; l2; m1; m2; g; I1; I2];
+sys_param = [l1; l2; m1; m2; g; d1; d2; I1; I2];
 
 %Motormomente:	
 syms tau1 tau2
 tau_m = [tau1; tau2];
 sys_input = tau_m;
 
-%% TEILAUFGABE b):
+%TEILAUFGABE b):
 %Bestimmung der Bewegungsgleichung
 
 %(i) Bestimmung der Jacobi-Matrix und der kinetischen Energie T
@@ -111,21 +111,21 @@ M2 = m2 * I_J_trans_SP2.' * I_J_trans_SP2 + K2_J_rot_SP2.' * I_S_ISP2 * I2 * I_S
 %correct??
 M = M1 + M2;
 
-%% (ii) Bestimmung der potentiellen Energie U
+%(ii) Bestimmung der potentiellen Energie U
 %via skalarprodukt
 U1 = m1 * I_g.' * I_r_SP1;
 U2 = m2 * I_g.' * I_r_SP2;
 
 U = U1 + U2;
 
-%% (iii) Bestimmung der nicht-konservative Kräfte
+%(iii) Bestimmung der nicht-konservative Kräfte
 %Reibmoment aus viskoser und statischer Reibung
 
 %Notiz: Die sign-Funtion wird approximiert durch (2/pi) * arctan(),
 %siehe Reibmoment_TESTFILE.m
-%-->veraltet, aber ansich Prinip dasselbe
-%F_si sind Momente... random Benennung
 
+%ÜBERARBEITEN:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %festgelegte Reibparameter
 syms mu_v1 mu_v2 F_s1 F_s2
 reib_param = [mu_v1; mu_v2; F_s1; F_s2];
@@ -133,18 +133,23 @@ reib_param = [mu_v1; mu_v2; F_s1; F_s2];
 
 %Gelenk 1
 b1 = 20;    %Erhöhung der Steigung von arctan
-tau_R_1 = (2/pi) * atan(b1 * alpha_dot) * (F_s1 + abs(alpha_dot) * mu_v1);
-
+F_N1 = (m1 + m2) * g;
+f_r = mu_c * (2/pi) * atan(b1 * alpha_dot) + f_v * alpha_dot + f_m * exp(-c * abs(alpha_dot)) * sign(alpha_dot);
+F_R1 = f_r * F_N1;
+tau_R_1 = d1 * F_R1;
 
 %Gelenk 2
 b2 = 20;    %Erhöhung der Steigung von arctan
-tau_R_2 = (2/pi) * atan(b2 * beta_dot) * (F_s2 + abs(beta_dot) * mu_v2);
+F_N2 = m2 * g;
+f_r = mu_c * (2/pi) * atan(b2 * beta_dot) + f_v * beta_dot + f_m * exp(-c * abs(beta_dot)) * sign(beta_dot);
+F_R2 = f_r * F_N2;
+tau_R_2 = d2 * F_R2;
 
 %Gesamtes Reibmoment
 tau_R = [tau_R_1; tau_R_2];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%% (iv) Bestimmung der Bewegungsgleichung in symbolischer Matrixform
+%(iv) Bestimmung der Bewegungsgleichung in symbolischer Matrixform
 %Form: M(y) * y_ddot + D(y, y_dot) * y_dot + G(y) = tau_R + tau_M = q(y, y_dot)
 
 %Berechnung von D(y, y_dot) mit Christoffel-Symbolen

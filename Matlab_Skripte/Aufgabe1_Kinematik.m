@@ -12,6 +12,11 @@ close all;
 %Verallgemeinerte Koordinaten:
 syms alpha beta
 
+%für Jacobians
+syms alpha_dot beta_dot
+y = [alpha; beta];
+y_dot = [alpha_dot; beta_dot];
+
 %Roboterparameter:
 syms l1 l2
 
@@ -93,7 +98,7 @@ T_12_trans = [1, 0, 0, l1;
 T_12_rot =  [cos(beta), -sin(beta), 0, 0;
              sin(beta), cos(beta), 0, 0;
              0, 0, 1, 0;
-             0, 0, 0, 1];   %rot um x1-Achse
+             0, 0, 0, 1];   %rot um z1-Achse
 
 T_12 = T_12_trans * T_12_rot;
 
@@ -111,3 +116,34 @@ disp(T_0EF);
 delta = T_0EF - T_03;
 disp('delta = ');
 disp(delta);
+
+%Exportieren von T_0EF als Matlab Function für inverse Kinematik
+matlabFunction(T_0EF,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\T_0EF_fcn', 'Vars', {alpha, beta, l1, l2});
+
+%-------------------------------------------------------------------------------------%
+%Man kann die symbolic Toolbox nicht in Simulink verwenden...
+
+%exportiere J, J_dot --> Gedankengang siehe InverseKinematics_TESTFILE.m
+r = T_0EF(1:3,4);
+
+%Geschwindigkeit
+%Notiz: r ist in inertial coordiantes? KA deutsch lol, deswegen physical
+%derr. gleich numerischer derr. 
+%und nutze Kettenregel: r_dot = (dr/dy)*y_dot
+J = jacobian(r,y);
+
+%Beschleunigung
+%erneut Kettenregel:
+%r_ddot = J_dot*y_dot + J*y_ddot
+%Da J eine Matrix ist, kann man nicht einfach mit jacobian Befehl arbeiten,
+%muss Elementweise erledigt werden.
+J_dot = sym(zeros(size(J))); 
+for i = 1:size(J, 1)
+    for j = 1:size(J, 2)
+        J_dot(i, j) = jacobian(J(i, j), y) * y_dot;
+    end
+end
+
+%Exportieren als Funktionen
+matlabFunction(J,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\J_func', 'Vars', {y, l1, l2});
+matlabFunction(J_dot,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\J_dot_func', 'Vars', {y, y_dot, l1, l2});

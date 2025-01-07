@@ -14,16 +14,27 @@ I_pEF_d = [4*sqrt(6) - 4*sqrt(2) - 10; -4*sqrt(6) - 4*sqrt(2) - 10*sqrt(3)   ; 0
 
 %Es soll eine ruckbegrenze Trajektorie gewählt werden, daher muss Beschleunigung stetig sein
 %-->Wähle cubic-function
-t=2;    %Anfahrtszeit
+t_a=2;    %Anfahrtszeit
 
-p_x = cubic_func(0,I_pEF_0(1),0,t,I_pEF_d(1),0);
-p_y = cubic_func(0,I_pEF_0(2),0,t,I_pEF_d(2),0);
+p_x = cubic_func(0,I_pEF_0(1),0,t_a,I_pEF_d(1),0);
+p_y = cubic_func(0,I_pEF_0(2),0,t_a,I_pEF_d(2),0);
 
 syms t
-trajektorie = [p_x(1) + p_x(2)*t + p_x(3)*t.^2 + p_x(4)*t.^3;
-               p_y(1) + p_y(2)*t + p_y(3)*t.^2 + p_y(4)*t.^3;
-               0];
-matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\Trajektorie', 'Vars', {t});
+r_des = [p_x(1) + p_x(2)*t + p_x(3)*t.^2 + p_x(4)*t.^3;
+         p_y(1) + p_y(2)*t + p_y(3)*t.^2 + p_y(4)*t.^3;
+         0];
+
+r_des_dot = [p_x(2) + 2*p_x(3)*t + 3*p_x(4)*t.^2;
+             p_y(2) + 2*p_y(3)*t + 3*p_y(4)*t.^2;
+             0];
+
+r_des_ddot = [2*p_x(3) + 6*p_x(4)*t;
+              2*p_y(3) + 6*p_y(4)*t;
+              0];
+
+trajektorie = [r_des; r_des_dot; r_des_ddot];
+
+matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\trajektorie', 'Vars', {t});
 
 
 
