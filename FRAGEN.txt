@@ -18,3 +18,8 @@
 7. Für inverse Dynamik: B ist eye(2,2)?
 
 8. Ansich macht das simulieren garkein Sinn da invere Dynamics = Modell?!
+
+9. Warum geht syms nicht in Simulink?
+
+10. Macht es Sinn die inverse Kinematik vorab symbolisch ausruchenen und dann einfach dem System hinzuzufügen?
+    weil hier könnte ich symbolic ausrechnen für paar punkte, dann interpolieren...

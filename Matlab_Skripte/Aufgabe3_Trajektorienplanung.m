@@ -34,7 +34,7 @@ r_des_ddot = [2*p_x(3) + 6*p_x(4)*t;
 
 trajektorie = [r_des; r_des_dot; r_des_ddot];
 
-matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\trajektorie', 'Vars', {t});
+matlabFunction(trajektorie,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\CALCtrajektorie', 'Vars', {t});
 
 
 
