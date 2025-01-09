@@ -23,7 +23,7 @@ I2 = 0.0045;
 %Es können noch b1, b2 eingestellt werden, die die Steigung der 
 %atan Funktion, welche genutzt wird zum ersetzten der sign Funktion
 %siehe Aufgabe2_Dynamik.m line 133.
-mu_v1 =3.843e-6;
+mu_v1 = 3.843e-6;
 mu_v2 = 3.887e-6; 
 F_s1  = 8.5e-4;
 F_s2  = 3.2e-4;

@@ -23,3 +23,5 @@
 
 10. Macht es Sinn die inverse Kinematik vorab symbolisch ausruchenen und dann einfach dem System hinzuzufügen?
     weil hier könnte ich symbolic ausrechnen für paar punkte, dann interpolieren...
+
+11. Trajektorienplanung cubic or quatratic
