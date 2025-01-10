@@ -25,3 +25,10 @@
     weil hier könnte ich symbolic ausrechnen für paar punkte, dann interpolieren...
 
 11. Trajektorienplanung cubic or quatratic
+
+12. Bei J^T * J immer warning: parenthise ...
+
+13. Bin mir ziemlich sicher V9-3/12 (2.1.60) is was falsch... oder aufjedenfall komisch
+
+14. Trajektorie passt in InverseKinematik? weil fit nicht so schön...
+    --> wir reden nicht drüber! es funktioniert, aber Skript ist sehr unschön.
