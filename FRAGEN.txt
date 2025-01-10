@@ -1,27 +1,38 @@
-1. Wie berechne ich meinen Orientierungsvektor aus meiner Rotationsmatrix. Oder kann ich einfach die Rotationsmatritzen verwenden
-   beim berechnen der kinetischen Energie?
+1. Wie berechne ich meinen Orientierungsvektor aus meiner Rotationsmatrix. Oder kann ich einfach die Rotationsmatritzen verwenden beim berechnen der kinetischen Energie?
+-> kinetische Energie via Drehgeschwindigkeit (siehe V8-11/16, siehe auch "Roesselsprung" aus Drehmatrizen", im vorliegenden Fall auch einfach aus der Anschauung)
 
-2. Wenn ich wie in V9-3/12 die kinetische Energie ausrechne mit der Jacobimatrix bzgl. des Körperfesten KOS, bekomme ich zeros,
-   da sie konst. ist bezüglich diesem KOS. Deswegen berechne ich bzgl. Intertial, wo ist der Fehler? 
-   Und warum nochmal Trafo ins Ineritalsystem des Trägheitsmoment? Die kinetische Energie ist doch ein scalar und somit unabhänging vom
-   Bezugssystem.
+2. Wenn ich wie in V9-3/12 die kinetische Energie ausrechne mit der Jacobimatrix bzgl. des Körperfesten KOS, bekomme ich zeros, da sie konst. ist bezüglich diesem KOS. Deswegen berechne ich bzgl. Intertial, wo ist der Fehler? 
+-> bezüglich welchem KOS? v_iS (2.1.57) sollte die Absolutgeschwindigkeit sein
+Und warum nochmal Trafo ins Ineritalsystem des Trägheitsmoment? Die kinetische Energie ist doch ein scalar und somit unabhänging vom Bezugssystem.
+Energien immer im Inertialsystem (unbeschleunigt)
+Multiplikation mit Jacobi-matrix welche im Inertialsystem gegeben da aus Absolutgeschwindigkeit
 
 3. Muss ich die Reibkräfte zusätzlich berücksichitgen, wenn ich bereits das Reibmoment berücksichtige?
    Wenn ja, dann f_r = J_trans^T * F_r? mit J_trans = [J1_trans, J2_trans]^T?
 
 4. System linearisieren?
+-> Für welchen Anwendungszweck, zB für Analyse/Reglerauslegung, rein für die Simulation nicht mMn
 
 5. V18-18/21 Bild, + zwischen inverse kinematic und dynamic falsch?
+-> Richtig, Einfach gar keine Summe da
 
 6. Wie umgehen mit Mehrdeutigkeiten in der inversen Kinematik?
 
 7. Für inverse Dynamik: B ist eye(2,2)?
+-> Ja
 
 8. Ansich macht das simulieren garkein Sinn da invere Dynamics = Modell?!
+-> Deswegen Störung draufgeben
 
 9. Warum geht syms nicht in Simulink?
+-> syms für einmalige Berechnungen (kostenintensiv, nicht auf Effizienz ausgelegt; Simulink ist zum Simulieren vno (Echtzeit-)Systemen)
 
 10. Macht es Sinn die inverse Kinematik vorab symbolisch ausruchenen und dann einfach dem System hinzuzufügen?
     weil hier könnte ich symbolic ausrechnen für paar punkte, dann interpolieren...
 
 11. Trajektorienplanung cubic or quatratic
+
+
+Zstl. Kommentare:
+-> KOS ggf. prüfen und dementsprechen die Trafo-Matrizen
+--> think about gitignore
