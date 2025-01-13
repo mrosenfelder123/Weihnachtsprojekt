@@ -32,3 +32,8 @@
 
 14. Trajektorie passt in InverseKinematik? weil fit nicht so schön...
     --> wir reden nicht drüber! es funktioniert, aber Skript ist sehr unschön.
+
+15. MIMO PID wie in Simulink Modell macht Sinn?
+
+16. Singularität: Im System Modell:
+                  Singularität sobald ich D und sys_input in die Inversion einbeziehe

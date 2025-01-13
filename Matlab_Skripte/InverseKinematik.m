@@ -179,7 +179,7 @@ legend('show');
 grid on;
 
 %% EXPORT ALS FUNKTIONEN
-Trajectory = [yd; 0; yd_dot; 0; yd_ddot; 0];
+Trajectory = [yd; yd_dot; yd_ddot];
 disp('Trajektorie = ')
 disp(Trajectory);
 matlabFunction(Trajectory,'File', ...
