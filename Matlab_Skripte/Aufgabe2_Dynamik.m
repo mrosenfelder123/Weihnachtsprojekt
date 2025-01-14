@@ -81,7 +81,7 @@ K0_r_SP2 = T_0SP2(1:3, 4);
 %Notiz: Berechnung im körperfesten Koordinatensystem, s.d. Trägheitsmoment = konst.
 K2_s_K1SP2 = [beta; 0; 0];
 %Rotationen sind additiv
-K0_s_0SP2 = K0_s_0SP1 + T_02(1:3,1:3) *K2_s_K1SP2;
+K0_s_0SP2 = K0_s_0SP1 + T_02(1:3,1:3) * K2_s_K1SP2;
 
 %Bestimmung der Jacobi-Matrix
 K0_J_trans_SP1 = jacobian(K0_r_SP1, y);
