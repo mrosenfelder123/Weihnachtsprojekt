@@ -37,3 +37,8 @@
 
 16. Singularität: Im System Modell:
                   Singularität sobald ich D und sys_input in die Inversion einbeziehe
+
+17. Wenn meine Motor inputs schwer zu extrahieren sind, also eine expliziter ausdruck generiert warden kann, wie kann ich dann für inverse Dynamics 
+    für meine motormomente lösen?
+
+18. Jetzt hier in dem file, wie kann ich deine Anworten rein mergen?
