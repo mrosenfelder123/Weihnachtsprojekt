@@ -32,7 +32,21 @@ Multiplikation mit Jacobi-matrix welche im Inertialsystem gegeben da aus Absolut
 
 11. Trajektorienplanung cubic or quatratic
 
+12. Bei J^T * J immer warning: parenthise ...
 
-Zstl. Kommentare:
--> KOS ggf. prüfen und dementsprechen die Trafo-Matrizen
---> think about gitignore
+13. Bin mir ziemlich sicher V9-3/12 (2.1.60) is was falsch... oder aufjedenfall komisch
+
+14. Trajektorie passt in InverseKinematik? weil fit nicht so schön...
+    --> wir reden nicht drüber! es funktioniert, aber Skript ist sehr unschön.
+
+15. MIMO PID wie in Simulink Modell macht Sinn?
+
+16. Singularität: Im System Modell:
+                  Singularität sobald ich D und sys_input in die Inversion einbeziehe
+
+17. Wenn meine Motor inputs schwer zu extrahieren sind, also eine expliziter ausdruck generiert warden kann, wie kann ich dann für inverse Dynamics 
+    für meine motormomente lösen?
+
+18. Jetzt hier in dem file, wie kann ich deine Anworten rein mergen?
+
+19. Welche Form soll ich abgaben?

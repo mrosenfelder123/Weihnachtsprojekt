@@ -20,14 +20,16 @@ y_ddot = [alpha_ddot; beta_ddot];
 
 %Gravitationsvektor in neg y-Richtung
 syms g
-I_g = [0; -g; 0];   
+I_g = [0; g; 0];   
 
 %Roboterparameter:
-syms l1 l2 m1 m2 I1 I2
-%Durchmesser der Gelenke zur bestimmung des wirkenden Reibmoments
-syms d1 d2
+syms l1 l2 m1 m2 K1_I1 K2_I2
 
-sys_param = [l1; l2; m1; m2; g; I1; I2];
+sys_param = [l1; l2; m1; m2; g; K1_I1; K2_I2];
+
+%Reibparameter
+syms mu_v1 mu_v2 F_s1 F_s2
+reib_param = [mu_v1; mu_v2; F_s1; F_s2];
 
 %Motormomente:	
 syms tau1 tau2
@@ -40,17 +42,11 @@ sys_input = tau_m;
 %(i) Bestimmung der Jacobi-Matrix und der kinetischen Energie T
 
 %Transformationsmatritzen aus Aufgabe 1:
-%Notiz: I... = Inertialsystem, SP... = Schwerpunkt, EF... = Endeffektor
+%Notiz: 0... = Inertialsystem, SP... = Schwerpunkt, EF... = Endeffektor
 
-T_I1 = [cos(alpha), -sin(alpha), 0, 0;
-        sin(alpha), cos(alpha), 0, 0;
-        0, 0, 1, 0;
-        0, 0, 0, 1];
+T_01 = calc_T_01(y,l1,l2);
 
-T_12 = [cos(beta), -sin(beta), 0, l1;
-        sin(beta),  cos(beta), 0,  0;
-        0,          0,         1,  0;
-        0,          0,         0,  1];
+T_02 = calc_T_02(y,l1,l2);
 
 %Bestimmung der POSE der Schwerpunkte der Körper 1 und 2
 
@@ -60,18 +56,15 @@ T_1SP1 =     [1, 0, 0, l1/2;
               0, 0, 1, 0;
               0, 0, 0, 1];
 
-T_ISP1 = T_I1 * T_1SP1;
+T_0SP1 = T_01 * T_1SP1;
 
-%im Inertialsystem, für E_pot
-I_r_SP1 = T_ISP1(1:3, 4);
-
-%im körperfesten Koordinatensystem, für E_kin
-K1_r_SP1 = T_1SP1(1:3, 4);
+%im Inertialsystem
+K0_r_SP1 = T_0SP1(1:3, 4);
 
 %Orienteirung des Schwerpunktes des Körpers 1:
 %Notiz: Berechnung im körperfesten Koordinatensystem, s.d. Trägheitsmoment = konst.
-K1_s_ISP1 = [alpha; 0; 0];
-I_S_ISP1 = T_ISP1(1:3, 1:3);
+K1_s_0SP1 = [alpha; 0; 0];
+K0_s_0SP1 = T_01(1:3,1:3) * K1_s_0SP1;
 
 %Position des Schwerpunktes des Körpers 2:
 T_2SP2 =     [1, 0, 0, l2/2;
@@ -79,42 +72,37 @@ T_2SP2 =     [1, 0, 0, l2/2;
               0, 0, 1, 0;
               0, 0, 0, 1];
 
-T_ISP2 = T_I1 * T_12 * T_2SP2;
+T_0SP2 = T_02 * T_2SP2;
 
-%im Inertialsystem, für E_pot
-I_r_SP2 = T_ISP2(1:3, 4);
-
-%im körperfesten Koordinatensystem, für E_kin
-K2_r_SP2 = T_2SP2(1:3, 4);
+%im Inertialsystem
+K0_r_SP2 = T_0SP2(1:3, 4);
 
 %Orienteirung des Schwerpunktes des Körpers 2:
 %Notiz: Berechnung im körperfesten Koordinatensystem, s.d. Trägheitsmoment = konst.
 K2_s_K1SP2 = [beta; 0; 0];
-I_S_ISP2 = T_ISP2(1:3, 1:3);
-
 %Rotationen sind additiv
-K2_s_ISP2 = T_12(1:3,1:3).' * K1_s_ISP1 + K2_s_K1SP2;
+K0_s_0SP2 = K0_s_0SP1 + T_02(1:3,1:3) * K2_s_K1SP2;
 
 %Bestimmung der Jacobi-Matrix
-I_J_trans_SP1 = jacobian(I_r_SP1, y);
-K1_J_rot_SP1 = jacobian(K1_s_ISP1, y);
+K0_J_trans_SP1 = jacobian(K0_r_SP1, y);
+K0_J_rot_SP1 = jacobian(K0_s_0SP1, y);
 
-I_J_trans_SP2 = jacobian(I_r_SP2, y);
-K2_J_rot_SP2 = jacobian(K2_s_ISP2, y);
+K0_J_trans_SP2 = jacobian(K0_r_SP2, y);
+K0_J_rot_SP2 = jacobian(K0_s_0SP2, y);
 
 %Bestimmung der Massenmatritzen M1 und M2
 %Notiz: I1, I2 bzgl. körperfestem Koordinatensystem!
 %FRAGE: Brauche ich Trafo I_S_ISP1)?!?! eig nicht oder?
-M1 = m1 * I_J_trans_SP1.' * I_J_trans_SP1 + K1_J_rot_SP1.' * I_S_ISP1 * I1 * I_S_ISP1.' * K1_J_rot_SP1;
-M2 = m2 * I_J_trans_SP2.' * I_J_trans_SP2 + K2_J_rot_SP2.' * I_S_ISP2 * I2 * I_S_ISP2.' * K2_J_rot_SP2;
+M1 = m1 * K0_J_trans_SP1.' * K0_J_trans_SP1 + K0_J_rot_SP1.' * T_01(1:3,1:3) * K1_I1 * K0_J_rot_SP1;
+M2 = m2 * K0_J_trans_SP2.' * K0_J_trans_SP2 + K0_J_rot_SP2.' * T_02(1:3,1:3) * K2_I2 * K0_J_rot_SP2;
 
-%correct??
+%Gesamte Massenmatrix ist die Summe
 M = M1 + M2;
 
 %% (ii) Bestimmung der potentiellen Energie U
 %via skalarprodukt
-U1 = m1 * I_g.' * I_r_SP1;
-U2 = m2 * I_g.' * I_r_SP2;
+U1 = m1 * I_g.' * K0_r_SP1;
+U2 = m2 * I_g.' * K0_r_SP2;
 
 U = U1 + U2;
 
@@ -125,11 +113,6 @@ U = U1 + U2;
 %siehe Reibmoment_TESTFILE.m
 %-->veraltet, aber ansich Prinip dasselbe
 %F_si sind Momente... random Benennung
-
-%festgelegte Reibparameter
-syms mu_v1 mu_v2 F_s1 F_s2
-reib_param = [mu_v1; mu_v2; F_s1; F_s2];
-
 
 %Gelenk 1
 b1 = 20;    %Erhöhung der Steigung von arctan
@@ -161,7 +144,14 @@ end
 G = jacobian(U, y).';
 
 %Erstellen von Matlab Funktionen für die Teile der Bewegungsgleichungen
-matlabFunction(M,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\MassMatrix', 'Vars', {y, sys_param, sys_input});
-matlabFunction(D,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\DMatrix', 'Vars', {y, y_dot, sys_param, sys_input, reib_param});
-matlabFunction(G,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\GVector', 'Vars', {y, sys_param, sys_input, reib_param});
-matlabFunction(tau_R,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\CALCtau_R', 'Vars', {y, y_dot, sys_param, sys_input, reib_param});
+matlabFunction(M,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\DynimakMatritzen\calc_M', ...
+    'Vars', {y, sys_param});
+
+matlabFunction(D,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\DynimakMatritzen\calc_D', ...
+    'Vars', {y, y_dot, sys_param});
+
+matlabFunction(G,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\DynimakMatritzen\calc_G', ...
+    'Vars', {y, sys_param});
+
+matlabFunction(tau_R,'File', 'D:\MASTER\Semester3\MSM\Weihnachtsprojekt\Matlab_Skripte\Systemmatrizen\DynimakMatritzen\calc_tau_R', ...
+    'Vars', {y, y_dot, sys_param, reib_param});
